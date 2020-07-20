@@ -1,0 +1,15 @@
+
+Total Comps saved: <%= Number.Delimit.number_to_delimited(@total_comps_saved, delimiter: ".", precision: 0) %> (<%= Number.Human.number_to_human(@total_comps_saved) %>)<br>
+Remaining Comps: <%= Number.Delimit.number_to_delimited(@remaining_comps, delimiter: ".", precision: 0) %> (<%= Number.Human.number_to_human(@remaining_comps) %>)<br>
+Comps ETA: <%= @comps_eta_value %> <%= @comps_eta_unity %><br>
+<br>
+Total Synergies saved: <%= Number.Delimit.number_to_delimited(@total_synergies_saved, delimiter: ".", precision: 0) %> (<%= Number.Human.number_to_human(@total_synergies_saved) %>)<br>
+Remaining Synergies: <%= Number.Delimit.number_to_delimited(@remaining_synergies, delimiter: ".", precision: 0) %> (<%= Number.Human.number_to_human(@remaining_synergies) %>)<br>
+Synergies ETA: <%= @synergies_eta_value %> <%= @synergies_eta_unity %><br>
+
+<%= if @stop do %>
+    <button phx-click=start>Start</button>
+<% else %>
+    <button phx-click=stop>Stop</button>
+<% end %>
+

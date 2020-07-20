@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:11
+    container_name: tft_helper-postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  tft_helper:
+    container_name: tft_helper
+    build:
+      context: .
+#    command: bash -c "mix phx.server"
+    command: bash -c "while true; do sleep 60; done"
+    volumes:
+      - .:/tft_helper
+      - tft_helper_data:/root
+    ports:
+      - 4000:4000
+    depends_on:
+      - postgres
+volumes:
+  postgres:
+  tft_helper_data:
