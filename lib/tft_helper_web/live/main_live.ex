@@ -7,7 +7,7 @@ defmodule TftHelperWeb.MainLive do
   alias TftHelper.Managers.CompManager
   alias TftHelper.Repo
 
-  @update_tick 100
+  @update_tick 1_000
   @total_comps CompManager.total_comps(8) + CompManager.total_comps(9) + CompManager.total_comps(10)
 
 
@@ -59,14 +59,14 @@ defmodule TftHelperWeb.MainLive do
     stop =
       if Map.has_key?(socket.assigns, :total_comps_saved) do
         socket.assigns.total_comps_saved == total_comps_saved or
-        socket.assigns.total_synergy_saved == total_synergies_saved
+        socket.assigns.total_synergies_saved == total_synergies_saved
       else
         true
       end
 
     {comps_eta_value, comps_eta_unity, comps_per_ms_list} =
       if Map.has_key?(socket.assigns, :remaining_comps) do
-        comps_per_ms = (socket.assigns.remaining_comps - remaining_comps) / @update_tick
+        comps_per_ms = (total_comps_saved - socket.assigns.total_comps_saved) / @update_tick
         comps_per_ms_list = Enum.take(socket.assigns.comps_per_ms_list ++ [comps_per_ms], -100)
         comps_per_ms_avg = Enum.reduce(comps_per_ms_list, fn (score, sum) -> sum + score end) + 0.1
         comps_eta_ms = remaining_comps / comps_per_ms_avg
@@ -80,7 +80,7 @@ defmodule TftHelperWeb.MainLive do
 
     {synergies_eta_value, synergies_eta_unity, synergies_per_ms_list} =
       if Map.has_key?(socket.assigns, :remaining_synergies) do
-        synergies_per_ms = (socket.assigns.remaining_synergies - remaining_synergies) / @update_tick
+        synergies_per_ms = (total_synergies_saved - socket.assigns.total_synergies_saved) / @update_tick
         synergies_per_ms_list = Enum.take(socket.assigns.synergies_per_ms_list ++ [synergies_per_ms], -100)
         synergies_per_ms_avg = Enum.reduce(synergies_per_ms_list, fn (score, sum) -> sum + score end) + 0.1
         if synergies_per_ms_avg > 0 do
