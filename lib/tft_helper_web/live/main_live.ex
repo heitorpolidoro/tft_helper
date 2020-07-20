@@ -56,6 +56,13 @@ defmodule TftHelperWeb.MainLive do
     total_synergies_saved = Repo.one(from c in Synergy, select: count(c))
 
     remaining_comps = @total_comps - total_comps_saved
+    stop =
+      if Map.has_key?(socket.assigns, :total_comps_saved) do
+        socket.assigns.total_comps_saved == total_comps_saved or
+        socket.assigns.total_synergy_saved == total_synergies_saved
+      else
+        true
+      end
 
     {comps_eta_value, comps_eta_unity, comps_per_ms_list} =
       if Map.has_key?(socket.assigns, :remaining_comps) do
@@ -99,6 +106,7 @@ defmodule TftHelperWeb.MainLive do
     |> assign(:synergies_eta_unity, synergies_eta_unity)
     |> assign(:synergies_per_ms_list, synergies_per_ms_list)
     |> assign(:remaining_synergies, total_comps_saved - total_synergies_saved)
+    |> assign(:stop, stop)
   end
 
   def ms_to_human(value, unity \\ "milliseconds", to_next_unity \\ 1000) do
